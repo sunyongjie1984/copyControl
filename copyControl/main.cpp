@@ -1,14 +1,39 @@
-//
-//  main.cpp
-//  copyControl
-//
-//  Created by å­™æ°¸æ° on 2022/5/3.
-//
+#include "example.h"
+int main()
+{
+    const char* p = "1234567"; // ÕâÖÖ²»ÊÇ×Ô¼ºnew³öÀ´µÄ×Ö·û´®µÄ£¬¸³ÖµÊ²Ã´µÄ£¬±È½ÏËæÒâ£¬±àÒëÆ÷°ïÎÒÎö¹¹£¬
+                         // ÀàÖÐµÄÇé¿öºÃÏñÖ»ÓÐÓÃmemcpyÕâÑùµÄº¯Êý²ÅÄÜ¸ü¸Ä
+    p = "american";      // char*¶ÔÏóµÄÖµ¡£p¿ÉÒÔÀí½âÎªÒ»¸öconst char*Ö¸Õë£¬Ö¸ÏòÒ»¸ö×Ö·û´®£¬
+                         // Õâ¸ö×Ö·û´®µÄÄÚÈÝ²»¿ÉÒÔ¸ü¸Ä
+                         // Ò²¿ÉÒÔÀí½âÎªÒ»¸ö×Ö·û´®³£Á¿ÀàÐÍµÄ¶ÔÏó¡£
+    std::cout << p << std::endl;
 
-#include <iostream>
+    CExample a;
+    a.Init(20);
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    CExample b = a;
+    CExample c(a); // ÕâÁ½¸öÓï¾äµÄÒâË¼ÍêÈ«Ò»Ñù£¬¶¼ÊÇµ÷ÓÃ¿½±´¹¹Ôìº¯Êý¹¹ÔìbºÍc¡£
+                   // ÕâÖÖÀàÖÐ°üº¬Ö¸ÕëµÄÀà£¬Èç¹ûÃ»ÓÐ¿½±´¹¹Ôìº¯ÊýÕâ¾ä»°¾Í»á³ö´í£¬µ÷ÊÔÖÐ¿ÉÒÔ·¢ÏÖaµÄpBufferÓë
+                   // bµÄpBufferÖ¸ÏòÍ¬Ò»¿éÄÚ´æ
+                   // ´ËÊ±º¯Êý½áÊøÊ±£¬ÏÈÎö¹¹b£¬¿ÉÒÔ³É¹¦£¬Îö¹¹aÊ±£¬ÓÉÓÚÈ¥deleteÍ¬Ò»¿éÄÚ´æ¶ø±¨´í;
+
+    a.SetBuffer(p);
+    // p = "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"; // strlen(p) > 20.
+    // a.SetTooLongBuffer(p); // ¾­µ÷ÊÔ·¢ÏÖÕâÑù×öÎö¹¹Ê±delete»á³ö´í£¬ºÜ¿ÉÄÜÊÇÎö¹¹Ê±»á¸ú¾ÝÄãnew³öÀ´¶àÉÙÀ´Îö¹¹¶àÉÙÄÚ´æ¡£
+
+    CExample d; 
+    d = a; // 1.ÕâÊÇÒ»¸ö¸³Öµ²Ù×÷£¬Èç¹ûÀàÃ»ÓÐ¶¨ÒåÖØÔØ¸³Öµ²Ù×÷·û£¬±àÒëÆ÷»á×Ô¶¯µ÷ÓÃÈ±Ê¡µÄ¸³Öµ²Ù×÷·û£¬µ«ÊÇÓÉÓÚ
+           // ÕâÊÇÒ»¸öÓÐÖ¸Õë³ÉÔ±µÄÀà£¬
+           // ÓÖ»áÔÚÎö¹¹µÄÊ±ºò£¬Îö¹¹Á½´ÎÍ¬Ò»¿éÄÚ´æ¡£Èç¹ûÉÏÃæµÄ´úÂëÃ»ÓÐ×¢ÊÍµô£¬ÄÇÃ´±àÒëÆ÷»áÎö¹¹d£¬c£¬b£¬aÕâ¸öË³Ðò£¬
+           // ÔÚÎö¹¹aÊ±±¨´í¡£ 
+           // 2.È±Ê¡µÄ¸³Öµ²Ù×÷Ö»ÊÇ¸´ÖÆÏàÓ¦µÄ³ÉÔ±±äÁ¿Öµ£¬¾ÉµÄÖµ»á±»¶ªÆú£¬¾ÉµÄ¶ÔÏóµÄÖ¸Õë³ÉÔ±±äÁ¿ËùÖ¸ÏòµÄnew
+           // ³öÀ´µÄ¶ÔÏó½«²»»á±»delete£¬Ôì³ÉÄÚ´æÐ¹Â¶¡£
+           // 3.ÐÂÉú³ÉµÄ¶ÔÏóµÄÖ¸Õë±äÁ¿Ö¸Ïò¸øÄã¸³ÖµµÄ¶ÔÏóµÄÖ¸Õë±äÁ¿Ö¸ÏòÍ¬Ò»¶ÔÏó£¬¶ø²»ÊÇÖØÐÂÉú³ÉÁËÖ¸Õë±äÁ¿Ö¸ÏòµÄ¶ÔÏó£¬
+           // Ò²¾ÍÊÇ1ÖÐµÄÎö¹¹Í¬Ò»Î»ÖÃ²úÉúµÄÔ­Òò¡£ËùÓÐ¸³Öµ²Ù×÷·ûµÄÖØÔØÓÐÁ½¸ö¹¤×÷£¬µÚÒ»Îö¹¹±»¸³Öµ¶ÔÏónew³öÀ´µÄ×ÊÔ´£¬
+           // µÚ¶þÊÇ½«¸øÄã¸³ÖµµÄ¶ÔÏóµÄÈ«²¿
+           // ÄÚÈÝ¸´ÖÆ¹ýÀ´£¬°üÀ¨Ö¸Õë³ÉÔ±Ö¸ÏòµÄ¶ÔÏóµÄÄÚÈÝµÄÖØÐÂÉú³É¡£
+    // b = a;
+    // a.PrintBuffer();
+    // b.PrintBuffer();
     return 0;
 }
